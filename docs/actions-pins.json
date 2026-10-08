@@ -30,7 +30,7 @@
       "runtime": "node24"
     }
   ],
-  "recipeActive": false,
+  "recipeActive": true,
   "repositoryMapped": true,
   "permissions": {
     "contents": "read"
@@ -49,9 +49,9 @@
     "historicalArtifactPin": "actions/upload-artifact SHA below is retained as historical evidence for the original Site recipe; not used by this variant.",
     "repository": "Jotaorto/brasil-democracia-2026",
     "privateRepositoryJob": "skipped before runner allocation",
-    "triggerPolicy": "push main offline; workflow_dispatch default false; scheduled drafts 6/day within dated guard"
+    "triggerPolicy": "push main without [coletar] offline; marked push collects; workflow_dispatch default false; scheduled drafts 6/day within dated guard"
   },
-  "activationStatus": "installed; execution blocked while repository is private",
+  "activationStatus": "public; initial hosted collection verification pending",
   "scheduleConfigured": true,
   "sourceSnapshot": {
     "siteVersion": 40,
@@ -62,5 +62,7 @@
     "runId": 37819259719,
     "conclusion": "skipped",
     "reason": "repository-private guard; no scripts executed"
-  }
+  },
+  "visibilityVerifiedAt": "2026-10-08T18:23:05Z",
+  "repositoryVisibility": "public"
 }

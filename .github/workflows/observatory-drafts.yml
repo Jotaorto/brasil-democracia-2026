@@ -1,4 +1,5 @@
-# Review workflow. Push to main performs only offline validation and draft tests.
+# Review workflow. Push to main without [coletar] performs offline validation.
+# A push marked [coletar] explicitly requests collection of unpublished drafts.
 # Scheduled runs collect unpublished drafts only; logs/summary, no artifacts.
 # A private repository is deliberately blocked
 # before a runner is allocated because no spending has been authorized.
@@ -75,7 +76,7 @@ jobs:
       - name: Gerar somente rascunho - manual começa offline
         if: steps.window.outputs.allowed == 'true'
         env:
-          COLLECT_REQUESTED: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect) }}
+          COLLECT_REQUESTED: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect) || (github.event_name == 'push' && contains(github.event.head_commit.message, '[coletar]')) }}
         shell: bash
         run: |
           if [[ "$COLLECT_REQUESTED" == "true" ]]; then
