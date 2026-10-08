@@ -1,0 +1,39 @@
+{
+  "checkedDate": "2026-10-08",
+  "verification": "Primary official action repositories/releases/commit URLs, read-only web verification; no Actions execution",
+  "pins": [
+    {
+      "action": "actions/checkout",
+      "release": "v7.0.1",
+      "sha": "3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "commitUrl": "https://github.com/actions/checkout/commit/3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "releaseUrl": "https://github.com/actions/checkout/releases/tag/v7.0.1",
+      "runtimeEvidence": "https://github.com/actions/checkout/blob/v7.0.1/action.yml",
+      "runtime": "node24"
+    },
+    {
+      "action": "actions/setup-python",
+      "release": "v7.0.0",
+      "sha": "5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "commitUrl": "https://github.com/actions/setup-python/commit/5fda3b95a4ea91299a34e894583c3862153e4b97",
+      "releaseUrl": "https://github.com/actions/setup-python/releases/tag/v7.0.0",
+      "runtimeEvidence": "https://github.com/actions/setup-python/blob/v7.0.0/action.yml",
+      "runtime": "node24"
+    },
+    {
+      "action": "actions/upload-artifact",
+      "release": "v7.0.2",
+      "sha": "cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "commitUrl": "https://github.com/actions/upload-artifact/commit/cf430e030ddbb5b0abf93d22962f4752f3646cd9",
+      "releaseUrl": "https://github.com/actions/upload-artifact/releases/tag/v7.0.2",
+      "runtimeEvidence": "https://github.com/actions/upload-artifact/blob/v7.0.2/action.yml",
+      "runtime": "node24"
+    }
+  ],
+  "recipeActive": false,
+  "repositoryMapped": false,
+  "permissions": {"contents": "read"},
+  "publishingTarget": "workflow artifacts containing unpublished drafts only",
+  "deploymentSecrets": [],
+  "limitations": "Python stdlib is free; GitHub runner/storage usage follows the account plan. The recipe does not promise cost zero or punctual schedule execution."
+}

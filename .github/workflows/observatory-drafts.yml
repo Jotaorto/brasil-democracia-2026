@@ -1,0 +1,125 @@
+# Review workflow. Push to main performs only offline validation and draft tests.
+# Scheduled runs collect unpublished drafts only; logs/summary, no artifacts.
+# A private repository is deliberately blocked
+# before a runner is allocated because no spending has been authorized.
+name: Observatório - rascunhos de fontes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      collect:
+        description: Consultar os quatro feeds EBC (somente leitura, dentro da janela)
+        type: boolean
+        default: false
+  schedule:
+    # UTC cron: 00:17, 04:17, 08:17, 12:17, 16:17, 20:17 em Brasília.
+    # The dated guard below prevents collection in later years.
+    - cron: '17 3,7,11,15,19,23 8-25 10 *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: observatory-drafts-${{ github.workflow }}
+  cancel-in-progress: false
+
+jobs:
+  draft:
+    # Job-level condition is checked before assigning the hosted runner.
+    # Do not remove this condition without a verified no-charge execution plan.
+    if: ${{ github.event.repository.private == false }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - name: Limite de data - antes de consultar fontes ou fazer checkout
+        id: window
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import datetime as dt
+          import os
+          now = dt.datetime.now(dt.timezone.utc)
+          start = dt.datetime(2026, 10, 8, 3, tzinfo=dt.timezone.utc)
+          end = dt.datetime(2026, 10, 26, 3, tzinfo=dt.timezone.utc)
+          allowed = start <= now < end
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as stream:
+              stream.write('allowed=' + str(allowed).lower() + '\n')
+          print('Janela de coleta aberta' if allowed else 'Janela encerrada; nenhuma consulta ou publicação executada')
+          PY
+
+      - name: Checkout somente leitura
+        if: steps.window.outputs.allowed == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, oficial
+        with:
+          persist-credentials: false
+
+      - name: Python - sem dependências pip
+        if: steps.window.outputs.allowed == 'true'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0, oficial
+        with:
+          python-version: '3.13'
+
+      - name: Testes offline
+        if: steps.window.outputs.allowed == 'true'
+        run: python -m unittest discover -s tests -p 'test_automation.py' -v
+
+      - name: Validar catálogo editorial sem alteração
+        if: steps.window.outputs.allowed == 'true'
+        run: python scripts/automation/validate_observatory.py worker/observatory-data.json --report out/validation.json
+
+      - name: Gerar somente rascunho - manual começa offline
+        if: steps.window.outputs.allowed == 'true'
+        env:
+          COLLECT_REQUESTED: ${{ github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.collect) }}
+        shell: bash
+        run: |
+          if [[ "$COLLECT_REQUESTED" == "true" ]]; then
+            python scripts/automation/collect_headlines.py --data worker/observatory-data.json --output out/observatory-news-draft.json
+          else
+            python scripts/automation/collect_headlines.py --data worker/observatory-data.json --output out/observatory-news-draft.json --offline
+          fi
+
+      - name: Registrar JSON nos logs e resumo - sem artefatos ou deploy
+        if: always() && steps.window.outputs.allowed == 'true'
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          summary_parts = [
+              '# Observatório — rascunhos para revisão\n\n',
+              'Somente validação e rascunhos; nenhuma publicação no Site.\n\n',
+          ]
+          for name in ('validation.json', 'observatory-news-draft.json'):
+              path = Path('out') / name
+              try:
+                  payload = json.loads(path.read_text(encoding='utf-8'))
+              except FileNotFoundError:
+                  payload = {'file': name, 'status': 'not_generated',
+                             'note': 'Arquivo ausente; conferir os testes e passos anteriores.'}
+              except (OSError, UnicodeError, ValueError) as error:
+                  payload = {'file': name, 'status': 'unreadable',
+                             'errorType': type(error).__name__}
+              rendered = json.dumps(payload, ensure_ascii=False, indent=2)
+              print('::group::' + name)
+              print(rendered)
+              print('::endgroup::')
+              summary_parts.append('## ' + name + '\n\n')
+              # Indented code prevents feed strings from becoming Markdown.
+              summary_parts.append(''.join('    ' + line + '\n' for line in rendered.splitlines()) + '\n')
+          summary = ''.join(summary_parts)
+          if len(summary.encode('utf-8')) > 850_000:
+              summary = ('# Observatório — rascunhos para revisão\n\n'
+                         'Os JSON completos estão nos logs da etapa. '
+                         'Resumo detalhado omitido para respeitar o limite de tamanho. '
+                         'Nenhuma publicação no Site.\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as stream:
+              stream.write(summary)
+          PY
