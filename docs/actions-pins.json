@@ -31,9 +31,36 @@
     }
   ],
   "recipeActive": false,
-  "repositoryMapped": false,
-  "permissions": {"contents": "read"},
-  "publishingTarget": "workflow artifacts containing unpublished drafts only",
+  "repositoryMapped": true,
+  "permissions": {
+    "contents": "read"
+  },
+  "publishingTarget": "GitHub job logs and step summary containing unpublished drafts only",
   "deploymentSecrets": [],
-  "limitations": "Python stdlib is free; GitHub runner/storage usage follows the account plan. The recipe does not promise cost zero or punctual schedule execution."
+  "limitations": "Python stdlib is free; GitHub runner/storage usage follows the account plan. The recipe does not promise cost zero or punctual schedule execution.",
+  "currentVariant": {
+    "workflow": ".github/workflows/observatory-drafts.yml",
+    "actionsUsed": [
+      "actions/checkout",
+      "actions/setup-python"
+    ],
+    "artifactUpload": false,
+    "resultDestination": "GitHub job logs and step summary only",
+    "historicalArtifactPin": "actions/upload-artifact SHA below is retained as historical evidence for the original Site recipe; not used by this variant.",
+    "repository": "Jotaorto/brasil-democracia-2026",
+    "privateRepositoryJob": "skipped before runner allocation",
+    "triggerPolicy": "push main offline; workflow_dispatch default false; scheduled drafts 6/day within dated guard"
+  },
+  "activationStatus": "installed; execution blocked while repository is private",
+  "scheduleConfigured": true,
+  "sourceSnapshot": {
+    "siteVersion": 40,
+    "commit": "ef6c9b29b36c653d5c2b3f44b007e9cf708ee9c6"
+  },
+  "hostedVerification": {
+    "commit": "2e30225f733c35012306d5c46a68715d8c988dad",
+    "runId": 37819259719,
+    "conclusion": "skipped",
+    "reason": "repository-private guard; no scripts executed"
+  }
 }
