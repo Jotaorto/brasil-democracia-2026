@@ -51,18 +51,37 @@
     "privateRepositoryJob": "skipped before runner allocation",
     "triggerPolicy": "push main without [coletar] offline; marked push collects; workflow_dispatch default false; scheduled drafts 6/day within dated guard"
   },
-  "activationStatus": "public; initial hosted collection verification pending",
+  "activationStatus": "public; initial hosted collection complete; schedule configured",
   "scheduleConfigured": true,
   "sourceSnapshot": {
     "siteVersion": 40,
     "commit": "ef6c9b29b36c653d5c2b3f44b007e9cf708ee9c6"
   },
   "hostedVerification": {
-    "commit": "2e30225f733c35012306d5c46a68715d8c988dad",
-    "runId": 37819259719,
-    "conclusion": "skipped",
-    "reason": "repository-private guard; no scripts executed"
+    "commit": "89dd4ac5a4c06ea3841b16c8eeb86f405113eb5b",
+    "runId": 37824127591,
+    "jobId": 113472416873,
+    "url": "https://github.com/Jotaorto/brasil-democracia-2026/actions/runs/37824127591",
+    "conclusion": "success",
+    "draftStatus": "complete",
+    "generatedAt": "2026-10-08T18:25:19Z",
+    "feedsAvailable": 4,
+    "draftItems": 22,
+    "testsPassed": 20,
+    "validationErrors": 0,
+    "validationWarnings": 13,
+    "published": false,
+    "requiresEditorialReview": true,
+    "editorialSeedModified": false
   },
   "visibilityVerifiedAt": "2026-10-08T18:23:05Z",
-  "repositoryVisibility": "public"
+  "repositoryVisibility": "public",
+  "historicalHostedVerification": [
+    {
+      "commit": "2e30225f733c35012306d5c46a68715d8c988dad",
+      "runId": 37819259719,
+      "conclusion": "skipped",
+      "reason": "repository-private guard; no scripts executed"
+    }
+  ]
 }

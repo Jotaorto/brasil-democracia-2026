@@ -48,3 +48,7 @@ Snapshot do catálogo: fonte do Site versão **40**, commit `ef6c9b29b36c653d5c2
 - [Condições dos jobs](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/control-jobs-with-conditions).
 - [Uso e cobrança](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
 - [Agendamentos](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule).
+
+## Primeira coleta verificada
+
+[Execução inicial no GitHub Actions](https://github.com/Jotaorto/brasil-democracia-2026/actions/runs/37824127591), em 08/10/2026 às 15:25 de Brasília: workflow concluído com sucesso, 20 testes aprovados, validação com zero erros e 13 avisos preservados. As quatro fontes responderam; foram gerados 22 rascunhos após deduplicação. Status `complete`, `published=false`, `requiresEditorialReview=true` e `editorialSeedModified=false`. Esse resultado confirma a coleta inicial, não uma publicação no Site nem a execução de horários futuros.
